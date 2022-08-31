@@ -37,9 +37,9 @@ class NumberController extends Controller
         $number->value = rand();
 
         if ($number->insert()) {
-            return ['message' => 'NumberModel created successfully!'];
+            return ['message' => 'Number created successfully!'];
         } else {
-            return ['message' => 'NumberModel not created!'];
+            return ['message' => 'Number not created!'];
         }
     }
 
@@ -53,7 +53,7 @@ class NumberController extends Controller
         if ($response) {
             return $response;
         } else {
-            return ['message' => 'NumberModel not found!'];
+            return ['message' => 'Number not found!'];
         }
     }
 }

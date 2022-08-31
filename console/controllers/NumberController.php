@@ -51,4 +51,36 @@ class NumberController extends Controller
             echo 'Numbers not found!';
         }
     }
+
+    /**
+     * @return void
+     * @throws Throwable
+     */
+    public function actionSet()
+    {
+        $number = new NumberModel();
+        $number->value = rand();
+
+        if ($number->insert()) {
+            echo 'Number created successfully!';
+        } else {
+            echo 'Number not created!';
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function actionGet($id)
+    {
+        $numbers = NumberModel::findOne($id);
+
+        if ($numbers) {
+            $str = JSON::encode($numbers);
+
+            echo $str;
+        } else {
+            echo 'Number not found!';
+        }
+    }
 }
