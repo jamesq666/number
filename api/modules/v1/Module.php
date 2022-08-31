@@ -2,7 +2,6 @@
 
 namespace api\modules\v1;
 
-use yii\filters\AccessControl;
 use yii\filters\auth\HttpBasicAuth;
 
 class Module extends \yii\base\Module
@@ -24,7 +23,7 @@ class Module extends \yii\base\Module
     /**
      * @return array
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         $behaviors = parent::behaviors();
 

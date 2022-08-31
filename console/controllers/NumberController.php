@@ -2,85 +2,97 @@
 
 namespace console\controllers;
 
-use common\models\NumberModel;
+use common\models\Number;
 use Throwable;
 use Yii;
 use yii\console\Controller;
+use yii\console\ExitCode;
 use yii\helpers\Json;
 
 /**
- * NumberModel Controller Console
+ * Number Controller Console
  */
 class NumberController extends Controller
 {
     /**
-     * @return void
+     * @return int
      * @throws Throwable
      */
-    public function actionSendEmail()
+    public function actionSendEmail(): int
     {
-        $numbers = NumberModel::find()->asArray()->all();
+        $numbers = Number::find()->asArray()->all();
 
-        if ($numbers) {
-            $str = JSON::encode($numbers);
-
-            Yii::$app->mailer->compose()
-                ->setFrom(Yii::$app->params['supportEmail'])
-                ->setTo(Yii::$app->params['adminEmail'])
-                ->setSubject('Numbers_' . date('Y-m-d'))
-                ->setTextBody($str)
-                ->send();
-        } else {
-            echo 'Numbers not found!';
+        if (!$numbers) {
+            $this->stdout('Numbers not found!');
+            return ExitCode::UNSPECIFIED_ERROR;
         }
+
+        $str = JSON::encode($numbers);
+
+        Yii::$app->mailer->compose()
+            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setTo(Yii::$app->params['adminEmail'])
+            ->setSubject('Numbers_' . date('Y-m-d'))
+            ->setTextBody($str)
+            ->send();
+
+        return ExitCode::OK;
     }
 
     /**
-     * @return void
+     * @return int
      */
-    public function actionCreateNumberFile()
+    public function actionCreateNumberFile(): int
     {
-        $numbers = NumberModel::find()->asArray()->all();
+        $numbers = Number::find()->asArray()->all();
 
-        if ($numbers) {
-            $str = JSON::encode($numbers);
-            $file = 'numbers_' . date('Y-m-d') . '.txt';
-
-            file_put_contents($file, $str);
-        } else {
-            echo 'Numbers not found!';
+        if (!$numbers) {
+            $this->stdout('Numbers not found!');
+            return ExitCode::UNSPECIFIED_ERROR;
         }
+
+        $content = JSON::encode($numbers);
+        $fileName = 'numbers_' . date('Y-m-d') . '.txt';
+        file_put_contents($fileName, $content);
+
+        return ExitCode::OK;
     }
 
     /**
-     * @return void
+     * @return int
      * @throws Throwable
      */
-    public function actionSet()
+    public function actionSet(): int
     {
-        $number = new NumberModel();
+        $number = new Number();
         $number->value = rand();
 
-        if ($number->insert()) {
-            echo 'Number created successfully!';
-        } else {
-            echo 'Number not created!';
+        if (!$number->insert()) {
+            $this->stdout('Number not created!');
+            return ExitCode::UNSPECIFIED_ERROR;
         }
+
+        $this->stdout('Number created successfully!');
+
+        return ExitCode::OK;
     }
 
     /**
-     * @return void
+     * @param $id integer
+     * @return int
      */
-    public function actionGet($id)
+    public function actionGet(int $id): int
     {
-        $numbers = NumberModel::findOne($id);
+        $numbers = Number::findOne($id);
 
-        if ($numbers) {
-            $str = JSON::encode($numbers);
-
-            echo $str;
-        } else {
-            echo 'Number not found!';
+        if (!$numbers) {
+            $this->stdout('Number not found!');
+            return ExitCode::UNSPECIFIED_ERROR;
         }
+
+        $data = JSON::encode($numbers);
+        $this->stdout($data);
+
+        return ExitCode::OK;
     }
 }

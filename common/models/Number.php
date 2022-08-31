@@ -5,25 +5,25 @@ namespace common\models;
 use yii\db\ActiveRecord;
 
 /**
- * NumberModel Model
+ * Number Model
  *
  * @property integer $id;
  * @property integer $value;
  */
-class NumberModel extends ActiveRecord
+class Number extends ActiveRecord
 {
      /**
-     * @inheritdoc
+     * @return string
      */
-    public static function tableName()
+    public static function tableName(): string
     {
-        return 'number';
+        return '{{number}}';
     }
 
     /**
-     * Define rules for validation
+     * @return array[]
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['id', 'value'], 'integer'],
@@ -33,7 +33,7 @@ class NumberModel extends ActiveRecord
     /**
      * @return string[]
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'value' => 'Значение',
