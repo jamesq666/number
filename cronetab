@@ -1,0 +1,2 @@
+0 0 * * * php c:\OpenServer\domains\number\yii number/create-number-file
+0 0 * * * php c:\OpenServer\domains\number\yii number/send-email
