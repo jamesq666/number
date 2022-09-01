@@ -36,6 +36,8 @@ class NumberController extends Controller
             ->setTextBody($str)
             ->send();
 
+        $this->stdout('Email send successfully!');
+
         return ExitCode::OK;
     }
 
@@ -54,6 +56,8 @@ class NumberController extends Controller
         $content = JSON::encode($numbers);
         $fileName = 'numbers_' . date('Y-m-d') . '.txt';
         file_put_contents($fileName, $content);
+
+        $this->stdout('File create successfully!');
 
         return ExitCode::OK;
     }
